@@ -179,5 +179,52 @@ IFS=$'\n'
 IFS=$IFS.OLD
 ```
 
+### 13.1.6小节 使用`*`来读取目录
+使用for循环来自动迭代一个目录下的所有文件
+
+脚本`test6.sh`
+```
+#!/bin/bash
+# iterate through all the files in a directory
+
+for file in /Users/haoliyang/Documents/GitHub/LCLSSB_3e/*
+do
+    if [ -d "$file" ]
+    then
+        echo "$file is a directory"
+    elif [ -f "$file" ]
+    then
+        echo "$file is a file"
+    fi
+done
+```
+
+
+脚本`test7.sh`
+```
+#!/bin/bash
+# iterating through multiple directories
+
+for file in /usr/bin/.b* /Users/haoliyang/Documents/GitHub/LCLSSB_3e/*
+do
+    if [ -d "$file" ]
+    then
+        echo "$file is a directory"
+    elif [ -f "$file" ]
+    then
+        echo "$file is a file"
+    else
+        echo "$file doesn't exist"
+    fi
+done
+```
+
+注意事项：
+- 您可以在列表数据中输入任何数据；
+- 即使文件或者目录不存在，for循环语句也会尝试处理您在列表中输入的数据；
+- 当处理文件和目录时，如果文件和目录不存在，则会有问题；
+- 您是没办法知道您是否在对一个不存在的目录进行迭代的；
+- 比较好的做法是：在处理目录或者文件时，先对其进行测试
+
 
 
