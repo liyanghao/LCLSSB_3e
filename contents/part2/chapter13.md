@@ -16,7 +16,7 @@ do
 done
 ```
 
-### 例1 读取`list`中的值
+### 13.1.1小节 读取列表中的值
 脚本`test1.sh`
 ```
 #!/bin/bash
@@ -41,3 +41,58 @@ echo "The last state we visited was $test"
 test=Connecticut
 echo "Wait, now we are visiting $test"
 ```
+### 13.1.2小节 读取列表中的复合值
+脚本`badtest1.sh`
+```
+#!/bin/bash
+# another example of how not to use the for command
+
+for test in I don't know if this'll work
+do
+    echo "word:$test"
+done
+```
+
+脚本`test2.sh`
+```
+#!/bin/bash
+# another example of how not to use the for command
+for test in I don\'t know if this\'ll work
+do
+    echo "word:$test"
+done
+```
+
+脚本`test2b.sh`
+```
+#!/bin/bash
+# another example of how not to use the for command
+for test in I "don't" know if "this'll" work
+do
+    echo "word:$test"
+done
+```
+
+脚本`badtest2.sh`
+```
+#!/bin/bash
+# another example of how not to use the for command
+
+for test in Nevada New Hampshire New Mexico New York North Carolina
+do
+    echo "Now going to $test" 
+done
+```
+
+脚本`test3.sh`
+```
+#!/bin/bash
+# an example of how to properly define values
+
+for test in Nevada "New Hampshire" "New Mexico" "New York"
+do
+    echo "Now going to $test"
+done
+```
+
+
