@@ -227,4 +227,29 @@ done
 - 比较好的做法是：在处理目录或者文件时，先对其进行测试
 
 
+## 案例
+
+### 循环访问文件数据
+
+```
+#!/bin/bash
+# 修改IFS的值
+
+IFS.OLD=$IFS
+IFS=$'\n'
+
+for entry in $(cat /etc/passwd)
+do
+    echo "Values in $entry -"
+    IFS=:
+    for value in $entry
+    do 
+        echo "  $value"
+    done
+done
+
+IFS=$IFS.OLD
+```
+
+
 
