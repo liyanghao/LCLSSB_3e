@@ -355,5 +355,41 @@ do
 done > test23.txt
 ```
 
+脚本`test24.sh`
+```
+#!/bin/bash
+# piping a loop to another command
+
+for state in "North Dakota" Connecticut Illinois Alabama Tennessee
+do
+    echo "$state is the next place to go"
+done | sort
+echo "This completes our travels"
+```
+
+## 实例
+
+### 实例1 查找出系统中可用的可执行文件
+脚本`test25.sh`
+```
+#!/bin/bash
+# finding files in the PATH
+
+IFS.OLD=$IFS
+IFS=:
+for folder in $PATH
+do
+    echo "$folder:"
+    for file in $folder/*
+    do
+        if [ -x $file ]
+        then
+            echo "  $file"
+        fi
+    done
+done
+IFS=$IFS.OLD
+```
+
 
 
