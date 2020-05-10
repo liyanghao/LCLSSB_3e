@@ -161,12 +161,22 @@ IFS=$'\n'
 # reading values from a file
 
 file="states.txt"
+IFS.OLD=$IFS
 IFS=$'\n'
 
 for state in $(cat $file)
 do
     echo "Visit beautiful $state"
 done
+IFS=$IFS.OLD
+```
+
+如果要临时修改IFS，则有比较好的代码示例：
+```
+IFS.OLD=$IFS
+IFS=$'\n'
+<use the new IFS value in code>
+IFS=$IFS.OLD
 ```
 
 
