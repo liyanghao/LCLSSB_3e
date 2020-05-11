@@ -66,6 +66,35 @@ echo The eleventh parameter is ${11}.
 echo The total is $total.
 ```
 
+例5 读取脚本名
+
+脚本`test5.sh`
+```
+#!/bin/bash
+# 测试$0参数
+#
+echo The zero parameter is set to: $0
+```
+
+例5b 对`$0`使用`basename`命令
+
+脚本`test5b.sh`
+```
+#!/bin/bash
+# 对$0使用命令basename
+#
+name=$(basename $0)
+echo
+echo The script name is: $name
+```
+
+例6 测试一个具有多功能的脚本
+
+脚本`test6.sh`
+```
+
+```
+
 
 
 
