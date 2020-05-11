@@ -15,6 +15,23 @@ bash shell
 位置参数变量是标准的数字，
 其中`$0`表示脚本名字，`$1`表示第一个参数，`$2`表示第二个参数，以此类推，直到第9个参数`$9`。
 
+### 命令行参数解释
+- `$0`：脚本名
+- `$1`：第一个命令行参数的名字
+- `basename $0`：获取不含路径的脚本名
+- `$#`：记录脚本运行时输入的命令行参数的个数
+- `${$#}`：表示最后一个命令行参数
+- `$*`：将所有的命令行参数当做一个参数
+- `$@`：取所有的命令行参数作为同一个字符串里的单独的词
+
+### 测试命令行参数
+在脚本中使用命令行参数时要很小心。如果运行脚本时没有带参数，则会发生坏的事情。
+
+当脚本假设在一个命令行参数里有数据，但没有传递数据时，大部分情况下，会得到一条错误消息输出。
+
+最好能在使用命令行参数前对参数进行检查。
+
+### 例题
 例1 使用命令行参数
 
 脚本`test1.sh`
@@ -108,6 +125,87 @@ fi
 echo
 echo The calculated value is $total 
 ```
+
+例7 在使用前测试命令行参数
+
+脚本`tesh7.sh`
+```
+#!/bin/bash
+# 在使用命令行参数前对其进行检查
+
+# [ -n "$1" ]是用来测试字符串$1的长度是否大于0
+if [ -n "$1" ]
+then
+    echo Hello $1, glad to see you.
+else
+    echo "Sorry, you did not identify yourself."
+fi
+```
+
+例8 获取命令行参数的个数
+
+脚本`test8.sh`
+```
+#!/bin/bash
+# 获取命令行参数的个数
+
+echo There were $# parameters supplied.
+```
+
+例9 测试命令行参数
+
+脚本`test9.sh`
+```
+#!/bin/bash
+# 测试命令行参数
+
+if [ $# -ne 2 ]
+then
+    echo
+    echo Usage: test9.sh a b
+    echo
+else 
+    total=$[ $1 + $2 ]
+    echo
+    echo The total is $total.
+    echo
+fi
+```
+
+例10 获取最后一个命令行参数
+
+脚本`test10.sh`
+```
+#!/bin/bash
+# 获取最后一个命令行参数
+#
+params=$#
+#
+echo
+echo The last parameter is $params
+echo The last parameter is ${!#}
+echo
+```
+输出：
+```
+./test10.sh
+
+The last parameter is 0
+The last parameter is ./test10.sh
+
+./test10.sh 1
+
+The last parameter is 1
+The last parameter is 1
+
+./test10.sh 3  
+
+The last parameter is 1
+The last parameter is 3
+
+```
+
+
 
 
 
