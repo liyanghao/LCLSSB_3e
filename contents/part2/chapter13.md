@@ -390,6 +390,30 @@ do
 done
 IFS=$IFS.OLD
 ```
+### 实例2 批量创建账户
+文件`users.csv`
+```
+haoly,Richard Blum
+christine,Christine Bresnahan
+barbara,Barbara Blum
+tim,Timothy Bresnahan
+```
+
+脚本`test26.sh`
+```
+#!/bin/bash
+# process new user accounts
+
+input="users.csv"
+IFS.OLD=$IFS
+while IFS=, read -r userid name
+do
+    echo "adding $userid"
+    useradd -c
+done < $input
+done
+IFS=$IFS.OLD
+```
 
 
 
