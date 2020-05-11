@@ -43,6 +43,29 @@ echo The second parameter is $2.
 echo The total value is $total.
 ```
 
+例3 测试字符串作为命令行参数
+
+脚本`test3.sh`
+```
+#!/bin/bash
+# 测试字符串命令行参数
+#
+echo Hello $1, glad to see you.
+```
+
+例4 处理的命令行参数超过9个
+
+脚本`test4.sh`
+```
+#!/bin/bash
+# 处理许多命令行参数
+#
+total=$[ ${10} * ${11} ]
+echo The tenth parameter is ${10}.
+echo The eleventh parameter is ${11}.
+echo The total is $total.
+```
+
 
 
 
