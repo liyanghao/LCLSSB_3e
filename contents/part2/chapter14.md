@@ -271,6 +271,63 @@ Parameter #3 = katie
 Parameter #4 = jessica
 ```
 
+例14 一次平移多个位置
+
+脚本`test14.sh`
+```
+#!/bin/bash
+# 一次平移多个位置
+#
+echo 
+echo "The original Parameters: $*"
+shift 2
+echo "Here's the new first parameter: $1"
+```
+
+输入输出示例
+```
+./test14.sh 1 2 3 4 5
+
+The original Parameters: 1 2 3 4 5
+Here's the new first parameter: 3
+```
+
+例15 抽取简单的命令行选项作为参数
+
+脚本`test15.sh`
+```
+#!/bin/bash
+# 抽取简单的命令行选项作为参数
+#
+echo 
+while [ -n "$1" ]
+do
+    case "$1" in
+      -a) echo "Found the -a option";;
+      -b) echo "Found the -b option";;
+      -c) echo "Found the -c option";;
+       *) echo "$1 is not an option"
+    esac
+    shift
+done
+```
+
+输入输出示例：
+```
+chapter14 git:(master) ✗ ./test15.sh -a -b -c -d
+
+Found the -a option
+Found the -b option
+Found the -c option
+-d is not an option
+➜  chapter14 git:(master) ✗ ./test15.sh -d -b -a -c
+
+-d is not an option
+Found the -b option
+Found the -a option
+Found the -c option
+```
+
 
 
 
