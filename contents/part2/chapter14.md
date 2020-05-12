@@ -244,6 +244,33 @@ do
 done
 ```
 
+例13 展示平移指令`shift`
+
+脚本`test13.sh`
+```
+#!/bin/bash
+# demonstrating the shift command
+#
+echo
+count=1
+while [ -n "$1" ]
+do
+    echo "Parameter #$count = $1"
+    count=$[ $count + 1 ]
+    shift
+done
+```
+
+输出输出示例：
+```
+./test13.sh rich barbara katie jessica
+
+Parameter #1 = rich
+Parameter #2 = barbara
+Parameter #3 = katie
+Parameter #4 = jessica
+```
+
 
 
 
