@@ -306,7 +306,7 @@ do
       -a) echo "Found the -a option";;
       -b) echo "Found the -b option";;
       -c) echo "Found the -c option";;
-       *) echo "$1 is not an option"
+       *) echo "$1 is not an option";;
     esac
     shift
 done
@@ -314,19 +314,71 @@ done
 
 输入输出示例：
 ```
-chapter14 git:(master) ✗ ./test15.sh -a -b -c -d
+./test15.sh -a -b -c -d
 
 Found the -a option
 Found the -b option
 Found the -c option
 -d is not an option
-➜  chapter14 git:(master) ✗ ./test15.sh -d -b -a -c
+
+
+./test15.sh -d -b -a -c
 
 -d is not an option
 Found the -b option
 Found the -a option
 Found the -c option
 ```
+
+例16 抽取可选项和命令行参数
+
+脚本`test16.sh`
+```
+#!/bin/bash
+# 抽取可选项和命令行参数
+#
+echo 
+while [ -n "$1" ]
+do
+    case "$1" in
+    -a) echo "Found the -a option";;
+    -b) echo "Found the -b option";;
+    -c) echo "Found the -c option";;
+    --) shift
+        break;;
+     *) echo "$1 is not an option";;
+    esac
+    shift
+done
+#
+count=1
+for param in $@
+do
+    echo "Parameter #$count: $param"
+    count=$[ $count + 1 ]
+done
+```
+输出输出示例：
+```
+./test16.sh -c -a -b test1 test2 test3
+
+Found the -c option
+Found the -a option
+Found the -b option
+test1 is not an option
+test2 is not an option
+test3 is not an option
+
+./test16.sh -c -a -b -- test1 test2 test3
+
+Found the -c option
+Found the -a option
+Found the -b option
+Parameter #1: test1
+Parameter #2: test2
+Parameter #3: test3
+```
+
 
 
 
