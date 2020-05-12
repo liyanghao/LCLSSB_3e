@@ -31,6 +31,24 @@ bash shell
 
 最好能在使用命令行参数前对参数进行检查。
 
+### 使用`getopt`命令
+
+格式
+```
+getopt optstring parameters
+```
+使用：
+- 在optstring中放入可选项字母；
+- 在需要参数值的可选项字母后放入冒号`:`；
+- `getopt`命令根据optstring来解析参数；
+
+getopt的使用举例
+```
+$ getopt ab:cd -a -b test1 -cd test2 test3
+ -a -b test1 -c -d -- test2 test3
+```
+
+
 ### 例题
 例1 使用命令行参数
 
@@ -435,8 +453,64 @@ Found the -a option
 -ac is not an option
 ```
 
+例18 使用指令`getopt`来抽取命令行可选项及其值
 
+脚本`test18.sh`
+```
+#!/bin/bash
+# 使用指令`getopt`来抽取命令行可选项及其值
+#
+set -- $(getopt -q ab:cd "$@")
+#
+echo
+while [ -n "$1" ]
+do
+    case "$1" in
+    -a) echo "Found the -a option";;
+    -b) param="$2"
+        echo "Found the -b option, with parameter value $param"
+        shift;;
+    -c) echo "Found the -c option";;
+    --) shift
+        break;;
+     *) echo "$1 is not an option";;
+    esac
+    shift
+done
+#
+count=1
+for param in "$@"
+do
+    echo "Parameter #$count: $param"
+    count=$[ $count + 1 ]
+done
+```
 
+输入输出示例：
+```
+[root@VM_0_16_centos test]# ./test18.sh -ac
+
+Found the -a option
+Found the -c option
+[root@VM_0_16_centos test]# ./test18.sh -a -b test1 -cd test2 test3 test4
+
+Found the -a option
+Found the -b option, with parameter value 'test1'
+Found the -c option
+-d is not an option
+Parameter #1: 'test2'
+Parameter #2: 'test3'
+Parameter #3: 'test4'
+[root@VM_0_16_centos test]# ./test18.sh -a -b test1 -cd "test2 test3" test4
+
+Found the -a option
+Found the -b option, with parameter value 'test1'
+Found the -c option
+-d is not an option
+Parameter #1: 'test2
+Parameter #2: test3'
+Parameter #3: 'test4'
+```
 
 
 
