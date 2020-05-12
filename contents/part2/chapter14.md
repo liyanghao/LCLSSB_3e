@@ -205,6 +205,19 @@ The last parameter is 3
 
 ```
 
+例11 测试`$*`指令和`$@`指令
+
+脚本`test11.sh`
+```
+#!/bin/bash
+# 测试$*和$@
+#
+echo
+echo "Using the \$* method: $*"
+echo
+echo "Using the \$@ method: $@"
+```
+
 
 
 
