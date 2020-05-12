@@ -379,6 +379,61 @@ Parameter #2: test2
 Parameter #3: test3
 ```
 
+例17 抽取命令行可选项及值
+
+脚本`test17.sh`
+```
+#!/bin/bash
+# 抽取可选项和命令行参数
+#
+echo 
+while [ -n "$1" ]
+do
+    case "$1" in
+    -a) echo "Found the -a option";;
+    -b) param="$2"
+        echo "Found the -b option, with parameter value $param"
+        shift;;
+    -c) echo "Found the -c option";;
+    --) shift
+        break;;
+     *) echo "$1 is not an option";;
+    esac
+    shift
+done
+#
+count=1
+for param in $@
+do
+    echo "Parameter #$count: $param"
+    count=$[ $count + 1 ]
+done
+```
+
+输入输出示例
+```
+/test17.sh -a -b test1 -d
+
+Found the -a option
+Found the -b option, with parameter value test1
+-d is not an option
+
+./test17.sh -b test1 -a -d
+
+Found the -b option, with parameter value test1
+Found the -a option
+-d is not an option
+
+./test17.sh -b test1 -a -d
+
+Found the -b option, with parameter value test1
+Found the -a option
+-d is not an option
+
+./test17.sh -ac           
+
+-ac is not an option
+```
 
 
 
