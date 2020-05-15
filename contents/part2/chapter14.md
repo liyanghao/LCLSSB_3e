@@ -31,6 +31,24 @@ bash shell
 
 最好能在使用命令行参数前对参数进行检查。
 
+### 使用`getopt`命令
+
+格式
+```
+getopt optstring parameters
+```
+使用：
+- 在optstring中放入可选项字母；
+- 在需要参数值的可选项字母后放入冒号`:`；
+- `getopt`命令根据optstring来解析参数；
+
+getopt的使用举例
+```
+$ getopt ab:cd -a -b test1 -cd test2 test3
+ -a -b test1 -c -d -- test2 test3
+```
+
+
 ### 例题
 例1 使用命令行参数
 
@@ -244,8 +262,255 @@ do
 done
 ```
 
+例13 展示平移指令`shift`
+
+脚本`test13.sh`
+```
+#!/bin/bash
+# demonstrating the shift command
+#
+echo
+count=1
+while [ -n "$1" ]
+do
+    echo "Parameter #$count = $1"
+    count=$[ $count + 1 ]
+    shift
+done
+```
+
+输出输出示例：
+```
+./test13.sh rich barbara katie jessica
+
+Parameter #1 = rich
+Parameter #2 = barbara
+Parameter #3 = katie
+Parameter #4 = jessica
+```
+
+例14 一次平移多个位置
+
+脚本`test14.sh`
+```
+#!/bin/bash
+# 一次平移多个位置
+#
+echo 
+echo "The original Parameters: $*"
+shift 2
+echo "Here's the new first parameter: $1"
+```
+
+输入输出示例
+```
+./test14.sh 1 2 3 4 5
+
+The original Parameters: 1 2 3 4 5
+Here's the new first parameter: 3
+```
+
+例15 抽取简单的命令行选项作为参数
+
+脚本`test15.sh`
+```
+#!/bin/bash
+# 抽取简单的命令行选项作为参数
+#
+echo 
+while [ -n "$1" ]
+do
+    case "$1" in
+      -a) echo "Found the -a option";;
+      -b) echo "Found the -b option";;
+      -c) echo "Found the -c option";;
+       *) echo "$1 is not an option";;
+    esac
+    shift
+done
+```
+
+输入输出示例：
+```
+./test15.sh -a -b -c -d
+
+Found the -a option
+Found the -b option
+Found the -c option
+-d is not an option
 
 
+./test15.sh -d -b -a -c
+
+-d is not an option
+Found the -b option
+Found the -a option
+Found the -c option
+```
+
+例16 抽取可选项和命令行参数
+
+脚本`test16.sh`
+```
+#!/bin/bash
+# 抽取可选项和命令行参数
+#
+echo 
+while [ -n "$1" ]
+do
+    case "$1" in
+    -a) echo "Found the -a option";;
+    -b) echo "Found the -b option";;
+    -c) echo "Found the -c option";;
+    --) shift
+        break;;
+     *) echo "$1 is not an option";;
+    esac
+    shift
+done
+#
+count=1
+for param in $@
+do
+    echo "Parameter #$count: $param"
+    count=$[ $count + 1 ]
+done
+```
+输出输出示例：
+```
+./test16.sh -c -a -b test1 test2 test3
+
+Found the -c option
+Found the -a option
+Found the -b option
+test1 is not an option
+test2 is not an option
+test3 is not an option
+
+./test16.sh -c -a -b -- test1 test2 test3
+
+Found the -c option
+Found the -a option
+Found the -b option
+Parameter #1: test1
+Parameter #2: test2
+Parameter #3: test3
+```
+
+例17 抽取命令行可选项及值
+
+脚本`test17.sh`
+```
+#!/bin/bash
+# 抽取可选项和命令行参数
+#
+echo 
+while [ -n "$1" ]
+do
+    case "$1" in
+    -a) echo "Found the -a option";;
+    -b) param="$2"
+        echo "Found the -b option, with parameter value $param"
+        shift;;
+    -c) echo "Found the -c option";;
+    --) shift
+        break;;
+     *) echo "$1 is not an option";;
+    esac
+    shift
+done
+#
+count=1
+for param in $@
+do
+    echo "Parameter #$count: $param"
+    count=$[ $count + 1 ]
+done
+```
+
+输入输出示例
+```
+/test17.sh -a -b test1 -d
+
+Found the -a option
+Found the -b option, with parameter value test1
+-d is not an option
+
+./test17.sh -b test1 -a -d
+
+Found the -b option, with parameter value test1
+Found the -a option
+-d is not an option
+
+./test17.sh -b test1 -a -d
+
+Found the -b option, with parameter value test1
+Found the -a option
+-d is not an option
+
+./test17.sh -ac           
+
+-ac is not an option
+```
+
+例18 使用指令`getopt`来抽取命令行可选项及其值
+
+脚本`test18.sh`
+```
+#!/bin/bash
+# 使用指令`getopt`来抽取命令行可选项及其值
+#
+set -- $(getopt -q ab:cd "$@")
+#
+echo
+while [ -n "$1" ]
+do
+    case "$1" in
+    -a) echo "Found the -a option";;
+    -b) param="$2"
+        echo "Found the -b option, with parameter value $param"
+        shift;;
+    -c) echo "Found the -c option";;
+    --) shift
+        break;;
+     *) echo "$1 is not an option";;
+    esac
+    shift
+done
+#
+count=1
+for param in "$@"
+do
+    echo "Parameter #$count: $param"
+    count=$[ $count + 1 ]
+done
+```
+
+输入输出示例：
+```
+[root@VM_0_16_centos test]# ./test18.sh -ac
+
+Found the -a option
+Found the -c option
+[root@VM_0_16_centos test]# ./test18.sh -a -b test1 -cd test2 test3 test4
+
+Found the -a option
+Found the -b option, with parameter value 'test1'
+Found the -c option
+-d is not an option
+Parameter #1: 'test2'
+Parameter #2: 'test3'
+Parameter #3: 'test4'
+[root@VM_0_16_centos test]# ./test18.sh -a -b test1 -cd "test2 test3" test4
+
+Found the -a option
+Found the -b option, with parameter value 'test1'
+Found the -c option
+-d is not an option
+Parameter #1: 'test2
+Parameter #2: test3'
+Parameter #3: 'test4'
+```
 
 
 
